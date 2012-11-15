@@ -1,42 +1,68 @@
 <?xml version="1.0"?>
-<project>
-	<!-- INSTALL
-	-->
-	<target name="install">
-		<mkdir dir="src" />
+<project basedir="." default="default" name="swing-garnish">
+    
+	<!-- Description du projet -->
+    	<description>Classes utilitaires pour Swing.</description>
+    
+    	<!-- Configuration -->
+	<!-- <property name="src"   	 	location="src/" /> -->
+	<property name="build"  	location="build/" />
+	<property name="dist"		location="dist/" />
+	<property name="javadoc"	location="javadoc/" />
+	<property name="lib"		location="lib/" />
+	<property name="jar"		location="${build}/jar/" />
+
+        <target name="init" description="Chargement des paramètres depuis config.properties">
+            <property file="config.properties" />
+        </target>
+
+	<target name="all" depends="jar,javadoc">
+
 	</target>
 
-	
+	<!-- INSTALL : Installation du projet -->
+	<target name="install" depends="init">
+		<mkdir dir="${src}" />
+		<mkdir dir="${lib}" />
+	</target>
+        
+        <!-- TEST : Lancement des tests unitaires. -->
+        <target name="test">
+            
+        </target>
 
-	<!-- JAR
-	-->
+	<!-- JAR : Construction du .jar	-->
 	<target name="jar" depends="compile">
-		<mkdir dir="build/jar" />
-		<jar destfile="build/jar/Project.jar" basedir="build/classes">
+		<mkdir dir="${jar}" />
+		<jar destfile="${jar}/${ant.project.name}.jar" basedir="${build}/classes/">
 			<manifest>
 				<attribute name="Main-Class" value="Test"/>
 			</manifest>
 		</jar>
 	</target>
 
-	<!-- COMPILE
-	-->
-	<target name="compile">
-		<mkdir dir="build/classes" />
-		<javac srcdir="src" destdir="build/classes" />
-	</target>
-	
-	<!-- JAVADOC
-	-->
-	<target name="javadoc">
-		<mkdir dir="javadoc" />
-		<javadoc srcpath="src" destdir="javadoc" />
+	<!-- CLEAN : Nettoyage du projet -->
+	<target name="clean" depends="init">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${javadoc}" />
 	</target>
 
-	<!-- RUN
-	-->
+	<!-- COMPILE : Compilation -->
+	<target name="compile" depends="init">
+		<mkdir dir="${build}/classes" />
+		<javac srcdir="${src}" destdir="${build}/classes" includeantruntime="false" />
+	</target>
+	
+	<!-- JAVADOC : Génération de la javadoc -->
+	<target name="javadoc" depends="init">
+		<mkdir dir="${javadoc}" />
+		<javadoc sourcepath="${src}" destdir="${javadoc}" />
+	</target>
+
+	<!-- RUN : Lancement -->
 	<target name="run" depends="jar">
-		<java jar="build/jar/Project.jar" fork="true" />
+		<java jar="${jar}/${ant.project.name}.jar" fork="true" />
 	</target>
 
 </project>

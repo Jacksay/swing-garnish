@@ -2,3 +2,5 @@ build/
 javadoc/
 *.bkp
 *~
+.build.xml.swp
+/nbproject/
