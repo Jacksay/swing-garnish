@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0"  encoding="UTF-8"?> 
 <project basedir="." default="default" name="swing-garnish">
     
 	<!-- Description du projet -->
@@ -15,8 +15,9 @@
         <target name="init" description="Chargement des paramètres depuis config.properties">
             <property file="config.properties" />
         </target>
-
-	<target name="all" depends="jar,javadoc">
+        
+        <!-- lance tout -->
+	<target name="default" depends="clean,jar,javadoc">
 
 	</target>
 
