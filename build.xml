@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<project>
+	<!-- INSTALL
+	-->
+	<target name="install">
+		<mkdir dir="src" />
+	</target>
+
+	
+
+	<!-- JAR
+	-->
+	<target name="jar" depends="compile">
+		<mkdir dir="build/jar" />
+		<jar destfile="build/jar/Project.jar" basedir="build/classes">
+			<manifest>
+				<attribute name="Main-Class" value="Test"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- COMPILE
+	-->
+	<target name="compile">
+		<mkdir dir="build/classes" />
+		<javac srcdir="src" destdir="build/classes" />
+	</target>
+	
+	<!-- JAVADOC
+	-->
+	<target name="javadoc">
+		<mkdir dir="javadoc" />
+		<javadoc srcpath="src" destdir="javadoc" />
+	</target>
+
+	<!-- RUN
+	-->
+	<target name="run" depends="jar">
+		<java jar="build/jar/Project.jar" fork="true" />
+	</target>
+
+</project>
