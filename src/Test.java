@@ -1,8 +1,16 @@
+
+import com.jacksay.sgarnish.containers.JckApplicationFrame;
+
 public class Test
 {
 	public static void main( String[] args )
 	{
-		System.out.println("TEST ANT de BASE");
+		new JckApplicationFrame() {
+		@Override
+		public void initializeConfiguration() {
+		   msgClosing = false;
+		}
+	    }.setVisible(true);
 	}
 }
 				

@@ -27,59 +27,172 @@ import com.jacksay.sgarnish.assets.JckIconProvider;
 import com.jacksay.sgarnish.containers.JckApplicationFrame;
 import com.jacksay.sgarnish.i18n.JckResourceBundle;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.Document;
+
 
 /**
  *
  * @author Stéphane Bouvry<stephane.bouvry@unicaen.fr>
  */
 public class JckViewAbout extends JDialog {
-    
-    
+
     JPanel controlBar, container;
+
     JckApplicationFrame app;
-    
+
+    JTabbedPane tab;
+
     public JckViewAbout(JckApplicationFrame owner) {
-        super(owner, JckResourceBundle.get("about"));
-        app = owner;
-        initializeComponent();
+	super(owner, JckResourceBundle.get("about"));
+	app = owner;
+	tab = new JTabbedPane();
+	initializeComponent();
     }
 
     private void initializeComponent() {
-        setSize(new Dimension(550, 400));
-        setModal(false);
-        setLayout(new BorderLayout());
-        setLocationRelativeTo(app);
-        setTitle(JckResourceBundle.get("app.name") + JckResourceBundle.get("app.version"));
-        
-        container = new JPanel(new BorderLayout());
-        JLabel label = new JLabel(JckResourceBundle.get("title"));
-        label.setFont(new Font("Arial", Font.BOLD, 48));
-        container.add(label);
-        controlBar = new JPanel(new FlowLayout());
-        controlBar.setAlignmentX(CENTER_ALIGNMENT);
-        JButton close = new JButton(JckResourceBundle.get("close"), JckIconProvider.getIcon("cancel"));
-        close.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                dispose();
-            }
-        });
-        controlBar.add(close);
-        
-        
-        add(container, BorderLayout.CENTER);
-        add(controlBar, BorderLayout.PAGE_END);
+	setSize(new Dimension(620, 400));
+	setMinimumSize(getSize());
+	setModal(false);
+	setLayout(new BorderLayout(10, 10));
+	setLocationRelativeTo(app);
+	setTitle(JckResourceBundle.get("app.name") + JckResourceBundle.get("app.version"));
+
+	container = new JPanel(new GridLayout(2, 1));
+	tab.add(JckResourceBundle.get("informations"), container);
+	tab.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+	container.setBackground(Color.white);
+	container.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	container.setAlignmentX(CENTER_ALIGNMENT);
+	JLabel label = new JLabel(
+		"<html>"
+		+ "<table width=570>"
+		+ "<tr><td>"
+		+ "<h1>" + JckResourceBundle.get("app.name") + "</h1>"
+		+ "<p>"
+		+ JckResourceBundle.get("version") + ": " + JckResourceBundle.get("app.version") + "<br>"
+		+ JckResourceBundle.get("vendor") + ": " + JckResourceBundle.get("app.vendor") + "<br>"
+		+ JckResourceBundle.get("site") + ": " + JckResourceBundle.get("app.site") + "<br>"
+		+ JckResourceBundle.get("contact") + ": " + JckResourceBundle.get("app.contact") + "<br>"
+		+ "</p>"
+		+ "</td>"
+		+ "<td align=right>"
+		+ "<img src=\"" + getClass().getResource("/LOGO.png") + "\" alt=\"LOGO\"/>"
+		+ "</td>"
+		+ "</tr><tr>"
+		+ "</table>"
+		+ "</html>");
+
+	label.setFont(new Font("Arial", Font.PLAIN, 14));
+	container.add(label);
+
+	JTextPane description = new JTextPane();
+	description.setContentType("text/html");
+	description.setText("<html>"+JckResourceBundle.get("app.description")+"</html>");
+	description.setBorder(BorderFactory.createTitledBorder("Description : "));
+	description.setEditable(false);
+	container.add(description);
+
+	// LICENSE
+	try {
+	    JEditorPane license = new JEditorPane(app.getClass().getResource(JckResourceBundle.get("file.license")));
+	    license.setEditable(false);
+	    tab.add(JckResourceBundle.get("license"), new JScrollPane(license));
+	} catch (IOException ex) {
+	    Logger.getLogger(JckViewAbout.class.getName()).log(Level.SEVERE, null, ex);
+	}
+
+	// LICENSE
+	JEditorPane credits;
+	StringBuilder contentCredits = new StringBuilder("<html>");
+	try {
+	    String line = null;
+	    StringBuilder out = new StringBuilder();
+	    BufferedReader reader = new BufferedReader(new FileReader(app.getClass().getResource(JckResourceBundle.get("file.credits")).getFile()));
+	    while ((line = reader.readLine()) != null) {
+		out.append(line);
+	    }
+	    contentCredits.append(out);
+	} catch (Exception ex) {
+	    Logger.getLogger(JckViewAbout.class.getName()).log(Level.SEVERE, null, ex);
+	}
+	credits = new JEditorPane();
+	credits.setContentType("text/html");
+	credits.setText(contentCredits + "<h1>Toolkit</h1>\n"
+		+ "    <p>That software use several free tools : </p>\n"
+		+ "    <ul>\n"
+		+ "        <li><strong>Swing Garnish Library (by Jacksay)</strong> : A little framework which simplify developement of Swing desktop application. <a href=\"http://code.google.com/p/swing-garnish/\">http://code.google.com/p/swing-garnish/</a></li>\n"
+		+ "        <li><strong>Fatcow Icon Library (by Fatcow)</strong> : 3000 Free \"Farm-Fresh Web Icons\". <a href=\"http://www.fatcow.com/free-icons\">http://www.fatcow.com/free-icons</a></li>\n"
+		+ "    </ul></html>");
+	credits.setFont(new Font("Arial", Font.ROMAN_BASELINE, 14));
+	credits.setEditable(false);
+	credits.addHyperlinkListener(new HyperlinkListener() {
+	    @Override
+	    public void hyperlinkUpdate(HyperlinkEvent he) {
+		if( he.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED) ){
+		    try {
+			if( Desktop.isDesktopSupported() ){
+			    try {
+				Desktop.getDesktop().browse(he.getURL().toURI());
+			    } catch (IOException ex) {
+				Logger.getLogger(JckViewAbout.class.getName()).log(Level.SEVERE, null, ex);
+			    }
+			}
+			System.out.println(he.getURL().toURI());
+		    } catch (URISyntaxException ex) {
+			Logger.getLogger(JckViewAbout.class.getName()).log(Level.SEVERE, null, ex);
+		    }
+		}
+		
+	    }
+	});
+
+	tab.add(JckResourceBundle.get("credits"), new JScrollPane(credits));
+
+	controlBar = new JPanel(new FlowLayout());
+	controlBar.setAlignmentX(CENTER_ALIGNMENT);
+	JButton close = new JButton(JckResourceBundle.get("close"), JckIconProvider.getIcon("cancel"));
+	close.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent ae) {
+		dispose();
+	    }
+
+	});
+	controlBar.add(close);
+
+
+	add(tab, BorderLayout.CENTER);
+	add(controlBar, BorderLayout.PAGE_END);
     }
-    
+
 }

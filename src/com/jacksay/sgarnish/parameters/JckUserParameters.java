@@ -23,10 +23,46 @@
  */
 package com.jacksay.sgarnish.parameters;
 
+import com.jacksay.sgarnish.containers.JckApplicationFrame;
+import com.jacksay.sgarnish.i18n.JckResourceBundle;
+import java.util.Locale;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
+
 /**
  *
  * @author Stéphane Bouvry<stephane.bouvry@unicaen.fr>
  */
-public class JckUserParameters {
+public class JckUserParameters extends Observable
+{
+    private static JckUserParameters instance;
+    private static boolean init = false;
+    private Preferences prefs;
     
+    public static void initialize( Class clazz ){
+	instance = new JckUserParameters( clazz );
+    }
+    
+    private JckUserParameters(Class clazz){
+	prefs = Preferences.userNodeForPackage(clazz);
+    }
+    
+    public static Locale getLocale(){
+	return new Locale(instance.prefs.get("l18n", Locale.FRANCE.toLanguageTag()));
+    }
+    public static void setLocale(Locale locale){
+	instance.prefs.put("l18n", locale.getLanguage());
+	ResourceBundle.clearCache();
+	instance.setChanged();
+	instance.notifyObservers("l18n");
+    }
+    
+    public static JckUserParameters getInstance(){
+	return instance;
+    }
+    
+    
+   
 }

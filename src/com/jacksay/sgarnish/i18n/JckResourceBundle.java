@@ -23,6 +23,7 @@
  */
 package com.jacksay.sgarnish.i18n;
 
+import com.jacksay.sgarnish.parameters.JckUserParameters;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class JckResourceBundle {
 
     private JckResourceBundle() {
         files = new ArrayList<>();
-        files.add(ResourceBundle.getBundle("jckapplication"));
+        files.add(ResourceBundle.getBundle("jckapplication", JckUserParameters.getLocale()));
     }
     
     private static JckResourceBundle getInstance(){
@@ -54,7 +55,7 @@ public class JckResourceBundle {
     
     public static void addResourceFile( String baseName ){
         System.out.println(baseName);
-        getInstance().files.add(ResourceBundle.getBundle(baseName));
+        getInstance().files.add(ResourceBundle.getBundle(baseName, JckUserParameters.getLocale()));
     }
     
     public static void enabledMissingTag( boolean enabled ){
