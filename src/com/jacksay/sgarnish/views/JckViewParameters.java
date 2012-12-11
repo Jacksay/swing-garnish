@@ -29,16 +29,20 @@ import com.jacksay.sgarnish.i18n.JckResourceBundle;
 import com.jacksay.sgarnish.parameters.JckUserParameters;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Locale;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 /**
  *
@@ -68,7 +72,12 @@ public class JckViewParameters extends JDialog {
         // Container
         container = new JPanel(new BorderLayout());
 	
+        // Générale
+        JPanel general = new JPanel();
+        general.setLayout(new FlowLayout());
+        
 	Box languages = Box.createHorizontalBox();
+        languages.add(new JLabel(JckResourceBundle.get("chose_language") +" : "));
 	languagesCombo = new JComboBox<>(new Locale[]{Locale.ENGLISH, Locale.FRENCH});
 	languagesCombo.setSelectedItem(JckUserParameters.getLocale());
 	languagesCombo.addActionListener(new ActionListener() {
@@ -77,17 +86,24 @@ public class JckViewParameters extends JDialog {
 		JckUserParameters.setLocale((Locale)languagesCombo.getSelectedItem());
 	    }
 	});
-	languages.add(languagesCombo);
-	container.add(languages);
+        languages.add(languagesCombo);
+	general.add(languages);
+        
+        JTabbedPane pane = new JTabbedPane();
+	pane.add(JckResourceBundle.get("general"), general);
+        
+        app.hookAddParameters(pane);
+        
+        pane.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
 	
-        add(container, BorderLayout.CENTER);
+        add(pane, BorderLayout.CENTER);
         
         // ControlBar
         controlBar = new JPanel();
         
         JButton close, save;
         
-        close = new JButton(JckResourceBundle.get("cancel"), JckIconProvider.getIcon("cancel"));
+        close = new JButton(JckResourceBundle.get("close"), JckIconProvider.getIcon("door_open"));
         close.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {

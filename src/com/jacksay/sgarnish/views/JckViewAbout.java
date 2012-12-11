@@ -26,10 +26,10 @@ package com.jacksay.sgarnish.views;
 import com.jacksay.sgarnish.assets.JckIconProvider;
 import com.jacksay.sgarnish.containers.JckApplicationFrame;
 import com.jacksay.sgarnish.i18n.JckResourceBundle;
+import com.jacksay.sgarnish.parameters.JckUserParameters;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -37,27 +37,23 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.text.Document;
 
 
 /**
@@ -71,6 +67,8 @@ public class JckViewAbout extends JDialog {
     JckApplicationFrame app;
 
     JTabbedPane tab;
+    
+    JCheckBox opener;
 
     public JckViewAbout(JckApplicationFrame owner) {
 	super(owner, JckResourceBundle.get("about"));
@@ -80,7 +78,7 @@ public class JckViewAbout extends JDialog {
     }
 
     private void initializeComponent() {
-	setSize(new Dimension(620, 400));
+	setSize(new Dimension(620, 500));
 	setMinimumSize(getSize());
 	setModal(false);
 	setLayout(new BorderLayout(10, 10));
@@ -180,7 +178,7 @@ public class JckViewAbout extends JDialog {
 
 	controlBar = new JPanel(new FlowLayout());
 	controlBar.setAlignmentX(CENTER_ALIGNMENT);
-	JButton close = new JButton(JckResourceBundle.get("close"), JckIconProvider.getIcon("cancel"));
+	JButton close = new JButton(JckResourceBundle.get("close"), JckIconProvider.getIcon("door_open"));
 	close.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent ae) {
@@ -188,6 +186,15 @@ public class JckViewAbout extends JDialog {
 	    }
 
 	});
+        
+        opener = new JCheckBox(JckResourceBundle.get("message.opener"), JckUserParameters.getShowAboutOnOpen());
+        opener.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                JckUserParameters.setShowAboutOnOpen(opener.isSelected());
+            }
+        });
+        controlBar.add(opener);
 	controlBar.add(close);
 
 

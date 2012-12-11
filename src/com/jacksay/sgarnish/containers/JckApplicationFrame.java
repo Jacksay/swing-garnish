@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
@@ -23,6 +25,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
 
@@ -39,6 +42,8 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
 
     // --- ACTIONS
     public Action quitAction, parametersAction, aboutAction;
+    
+    protected SortedMap<String, JMenu> menus = new TreeMap<>();
 
     // --- MENUS de BASE
     public JMenu menuFile, menuEdit, menuAbout;
@@ -73,24 +78,43 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
 	initializeEvent();
 	initializeMenu();
 	setTitle(JckResourceBundle.get("app.name") + " - version " + JckResourceBundle.get("app.version"));
+        onOpen();
     }
 
     private void initializeMenu() {
 	setJMenuBar(getCustomMenuBar());
     }
-
+    
+    
+    // --- Main menus
+    protected JMenu getMenu( String menuTag ){
+        if( !menus.containsKey(menuTag) ){
+            menus.put(menuTag, new JMenu(JckResourceBundle.get(menuTag)));
+        }
+        return menus.get(menuTag);
+    }
+    
+    protected void populateMenu( JMenu menu, Action action, int key ){
+        JMenuItem item;
+        menu.add(item = new JMenuItem(action));
+        item.setAccelerator(KeyStroke.getKeyStroke(key, KeyEvent.CTRL_MASK));
+    }
+    
     protected JMenuBar getCustomMenuBar() {
 	JMenuBar menu = new JMenuBar();
 	JMenuItem item;
 	// Menu "File"
 	menuFile = new JMenu(JckResourceBundle.get("file"));
+        populateFile( menuFile );
 	menuFile.add(item = new JMenuItem(quitAction));
 	item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_MASK));
 	menu.add(menuFile);
 
-	menuEdit = new JMenu(JckResourceBundle.get("edition"));
+	menuEdit = new JMenu(JckResourceBundle.get("edit"));
 	menuEdit.add(parametersAction);
 	menu.add(menuEdit);
+        
+        hookAddMenu(menu);
 
 	// Menu "About"
 	menuAbout = new JMenu(JckResourceBundle.get("about"));
@@ -107,7 +131,6 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
     }
 
     private void initializeComponment() {
-	setLocationRelativeTo(null);
 	setIconImage(JckIconProvider.getImage("wrench"));
 	setSize(defaultSize);
     }
@@ -117,17 +140,20 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
 	addWindowListener(new WindowAdapter() {
 	    @Override
 	    public void windowClosing(WindowEvent e) {
-		onWindowClosing(e); //To change body of generated methods, choose Tools | Templates.
+		onClose(e); //To change body of generated methods, choose Tools | Templates.
 	    }
 
 	});
     }
-
+    
+    /**
+     * Initialize default actions.
+     */
     private void initializeActions() {
 	quitAction = new AbstractAction(JckResourceBundle.get("quit"), JckIconProvider.getIcon("cancel")) {
 	    @Override
 	    public void actionPerformed(ActionEvent ae) {
-		onWindowClosing(null);
+		onClose(null);
 	    }
 
 	};
@@ -152,6 +178,7 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
     protected void displayParameters() {
 	if (viewParameters == null) {
 	    viewParameters = new JckViewParameters(this);
+            viewParameters.setLocationRelativeTo(this);
 	}
 	viewParameters.setVisible(true);
     }
@@ -161,13 +188,14 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
 	    viewAbout = new JckViewAbout(this);
 	}
 	viewAbout.setVisible(true);
+        viewAbout.setLocationRelativeTo(this);
     }
 
     protected void displayHelp() {
     }
 
     // HANDLER -----------------------------------------------------------------
-    protected void onWindowClosing(WindowEvent e) {
+    protected void onClose(WindowEvent e) {
 	int response = JOptionPane.YES_OPTION;
 
 	if (requireConfirmationOnClosing()) {
@@ -180,6 +208,14 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
 	if (response == JOptionPane.YES_OPTION) {
 	    System.exit(0);
 	}
+    }
+    
+    protected void onOpen(){
+        setVisible(true);
+        setLocationRelativeTo(null);
+        if( JckUserParameters.getShowAboutOnOpen() ){
+            displayAbout();
+        }
     }
 
     public boolean requireConfirmationOnClosing() {
@@ -196,6 +232,18 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
 	    
 	}
 	
+    }
+
+    protected void populateFile(JMenu menuFile) {
+        
+    }
+
+    public void hookAddParameters(JTabbedPane pane) {
+        // Override
+    }
+
+    public void hookAddMenu(JMenuBar menu) {
+        
     }
     
     

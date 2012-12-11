@@ -39,6 +39,15 @@ public class JckUserParameters extends Observable
 {
     private static JckUserParameters instance;
     private static boolean init = false;
+
+    public static boolean getShowAboutOnOpen() {
+        return instance.prefs.getBoolean("showAboutOnOpen", true);
+    }
+    
+    public static void setShowAboutOnOpen( boolean b ){
+        instance.prefs.putBoolean("showAboutOnOpen", b);
+    }
+    
     private Preferences prefs;
     
     public static void initialize( Class clazz ){
