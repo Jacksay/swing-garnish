@@ -24,6 +24,7 @@
 package com.jacksay.sgarnish.views;
 
 import com.jacksay.sgarnish.assets.JckIconProvider;
+import com.jacksay.sgarnish.components.LanguageComboBoxRenderer;
 import com.jacksay.sgarnish.containers.JckApplicationFrame;
 import com.jacksay.sgarnish.i18n.JckResourceBundle;
 import com.jacksay.sgarnish.parameters.JckUserParameters;
@@ -37,6 +38,7 @@ import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -78,7 +80,9 @@ public class JckViewParameters extends JDialog {
         
 	Box languages = Box.createHorizontalBox();
         languages.add(new JLabel(JckResourceBundle.get("chose_language") +" : "));
-	languagesCombo = new JComboBox<>(new Locale[]{Locale.ENGLISH, Locale.FRENCH});
+	languagesCombo = new JComboBox<>(new DefaultComboBoxModel(new Locale[]{Locale.ENGLISH, Locale.FRENCH}){
+            
+        });
 	languagesCombo.setSelectedItem(JckUserParameters.getLocale());
 	languagesCombo.addActionListener(new ActionListener() {
 	    @Override
@@ -86,6 +90,7 @@ public class JckViewParameters extends JDialog {
 		JckUserParameters.setLocale((Locale)languagesCombo.getSelectedItem());
 	    }
 	});
+        languagesCombo.setRenderer(new LanguageComboBoxRenderer());
         languages.add(languagesCombo);
 	general.add(languages);
         
