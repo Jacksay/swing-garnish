@@ -37,8 +37,7 @@ import java.util.prefs.Preferences;
  */
 public class JckUserParameters extends Observable
 {
-    private static JckUserParameters instance;
-    private static boolean init = false;
+    protected static JckUserParameters instance;
 
     public static boolean getShowAboutOnOpen() {
         return instance.prefs.getBoolean("showAboutOnOpen", true);
@@ -48,14 +47,18 @@ public class JckUserParameters extends Observable
         instance.prefs.putBoolean("showAboutOnOpen", b);
     }
     
-    private Preferences prefs;
+    protected Preferences prefs;
     
     public static void initialize( Class clazz ){
 	instance = new JckUserParameters( clazz );
     }
     
-    private JckUserParameters(Class clazz){
+    protected JckUserParameters(Class clazz){
 	prefs = Preferences.userNodeForPackage(clazz);
+    }
+    
+    protected static Preferences getPreferences(){
+        return instance.prefs;
     }
     
     public static Locale getLocale(){
@@ -64,6 +67,7 @@ public class JckUserParameters extends Observable
     public static void setLocale(Locale locale){
 	instance.prefs.put("l18n", locale.getLanguage());
 	ResourceBundle.clearCache();
+        
 	instance.setChanged();
 	instance.notifyObservers("l18n");
     }

@@ -19,16 +19,16 @@ import javax.swing.filechooser.FileFilter;
  *
  * @author Stéphane Bouvry<stephane.bouvry@unicaen.fr>
  */
-public class CustomFileFilter extends FileFilter {
+public class JckCustomFileFilter extends FileFilter {
 
     private String description;
     private String[] extensions;
 
-    public CustomFileFilter(String description, String extension) {
+    public JckCustomFileFilter(String description, String extension) {
         this(description, new String[]{extension});
     }
 
-    public CustomFileFilter(String description, String[] extensions) {
+    public JckCustomFileFilter(String description, String[] extensions) {
         String separator = "";
         this.description = description.concat("(");
         this.extensions = new String[extensions.length];

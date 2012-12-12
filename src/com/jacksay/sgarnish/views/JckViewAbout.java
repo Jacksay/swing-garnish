@@ -25,6 +25,7 @@ package com.jacksay.sgarnish.views;
 
 import com.jacksay.sgarnish.assets.JckIconProvider;
 import com.jacksay.sgarnish.containers.JckApplicationFrame;
+import com.jacksay.sgarnish.exceptions.UserFriendlyException;
 import com.jacksay.sgarnish.i18n.JckResourceBundle;
 import com.jacksay.sgarnish.parameters.JckUserParameters;
 import java.awt.BorderLayout;
@@ -70,14 +71,14 @@ public class JckViewAbout extends JDialog {
     
     JCheckBox opener;
 
-    public JckViewAbout(JckApplicationFrame owner) {
+    public JckViewAbout(JckApplicationFrame owner) throws UserFriendlyException {
 	super(owner, JckResourceBundle.get("about"));
 	app = owner;
 	tab = new JTabbedPane();
 	initializeComponent();
     }
 
-    private void initializeComponent() {
+    private void initializeComponent() throws UserFriendlyException {
 	setSize(new Dimension(620, 500));
 	setMinimumSize(getSize());
 	setModal(false);
@@ -126,7 +127,7 @@ public class JckViewAbout extends JDialog {
 	    license.setEditable(false);
 	    tab.add(JckResourceBundle.get("license"), new JScrollPane(license));
 	} catch (IOException ex) {
-	    Logger.getLogger(JckViewAbout.class.getName()).log(Level.SEVERE, null, ex);
+	    throw new UserFriendlyException(ex.getLocalizedMessage(), ex);
 	}
 
 	// LICENSE

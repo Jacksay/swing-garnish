@@ -1,10 +1,14 @@
 package com.jacksay.sgarnish.containers;
 
 import com.jacksay.sgarnish.assets.JckIconProvider;
+import com.jacksay.sgarnish.exceptions.UserFriendlyException;
 import com.jacksay.sgarnish.i18n.JckResourceBundle;
 import com.jacksay.sgarnish.parameters.JckUserParameters;
+import com.jacksay.sgarnish.views.JckStatusApplication;
 import com.jacksay.sgarnish.views.JckViewAbout;
 import com.jacksay.sgarnish.views.JckViewParameters;
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -18,6 +22,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
@@ -25,6 +31,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
@@ -47,11 +54,13 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
 
     // --- MENUS de BASE
     public JMenu menuFile, menuEdit, menuAbout;
+    protected JMenuBar mainMenu;
 
     // --- VIEWS
-    private JckViewParameters viewParameters;
-
-    private JckViewAbout viewAbout;
+    protected JckViewParameters viewParameters;
+    protected JckViewAbout viewAbout;
+    protected JPanel mainFrame;
+    protected JckStatusApplication statusBar;
     /* private JckParameters viewParameters;
      private JckParameters viewParameters;*/
     
@@ -66,19 +75,23 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
     }
 
     public JckApplicationFrame(String title) throws HeadlessException {
-	JckUserParameters.initialize(this.getClass());
-	JckUserParameters.getInstance().addObserver(this);
-	locales.add(Locale.ENGLISH);
-	locales.add(Locale.FRANCE);
-	//setLocale(JckUserParameters.getLocale());
-	initializeConfiguration();
-	initializeResources();
-	initializeActions();
-	initializeComponment();
-	initializeEvent();
-	initializeMenu();
-	setTitle(JckResourceBundle.get("app.name") + " - version " + JckResourceBundle.get("app.version"));
-        onOpen();
+        try {
+            JckUserParameters.initialize(this.getClass());
+            JckUserParameters.getInstance().addObserver(this);
+            locales.add(Locale.ENGLISH);
+            locales.add(Locale.FRANCE);
+            //setLocale(JckUserParameters.getLocale());
+            initializeConfiguration();
+            initializeResources();
+            initializeActions();
+            initializeComponment();
+            initializeEvent();
+            initializeMenu();
+            setTitle(JckResourceBundle.get("app.name") + " - version " + JckResourceBundle.get("app.version"));
+            onOpen();
+        } catch ( Exception ex ){
+            getStatus().addError(ex);
+        }
     }
 
     private void initializeMenu() {
@@ -101,29 +114,33 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
     }
     
     protected JMenuBar getCustomMenuBar() {
-	JMenuBar menu = new JMenuBar();
+	mainMenu = new JMenuBar();
 	JMenuItem item;
 	// Menu "File"
 	menuFile = new JMenu(JckResourceBundle.get("file"));
         populateFile( menuFile );
 	menuFile.add(item = new JMenuItem(quitAction));
 	item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_MASK));
-	menu.add(menuFile);
+	mainMenu.add(menuFile);
 
 	menuEdit = new JMenu(JckResourceBundle.get("edit"));
 	menuEdit.add(parametersAction);
-	menu.add(menuEdit);
+	mainMenu.add(menuEdit);
         
-        hookAddMenu(menu);
+        hookAddMenu(mainMenu);
 
 	// Menu "About"
 	menuAbout = new JMenu(JckResourceBundle.get("about"));
 	item = new JMenuItem(aboutAction);
 	item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_MASK));
 	menuAbout.add(item);
-	menu.add(menuAbout);
+	mainMenu.add(menuAbout);
 
-	return menu;
+	return mainMenu;
+    }
+    
+    public JckStatusApplication getStatus(){
+        return statusBar;
     }
 
     private void initializeResources() {
@@ -133,6 +150,16 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
     private void initializeComponment() {
 	setIconImage(JckIconProvider.getImage("wrench"));
 	setSize(defaultSize);
+        setLayout(new BorderLayout());
+        mainFrame = new JPanel();
+        statusBar = new JckStatusApplication(this);
+        add(mainFrame, BorderLayout.CENTER);
+        add(statusBar, BorderLayout.PAGE_END);
+        viewParameters = new JckViewParameters(this);
+    }
+    
+    protected Component getMainFrame(){
+        return mainFrame;
     }
 
     private void initializeEvent() {
@@ -169,21 +196,22 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
 	aboutAction = new AbstractAction(JckResourceBundle.get("about"), JckIconProvider.getIcon("information")) {
 	    @Override
 	    public void actionPerformed(ActionEvent ae) {
-		displayAbout();
+                try {
+                    displayAbout();
+                } catch (UserFriendlyException ex) {
+                    getStatus().addError(ex);
+                }
 	    }
 
 	};
     }
 
     protected void displayParameters() {
-	if (viewParameters == null) {
-	    viewParameters = new JckViewParameters(this);
-            viewParameters.setLocationRelativeTo(this);
-	}
+        viewParameters.setLocationRelativeTo(this);
 	viewParameters.setVisible(true);
     }
 
-    protected void displayAbout() {
+    protected void displayAbout() throws UserFriendlyException {
 	if (viewAbout == null) {
 	    viewAbout = new JckViewAbout(this);
 	}
@@ -210,7 +238,7 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
 	}
     }
     
-    protected void onOpen(){
+    protected void onOpen() throws UserFriendlyException{
         setVisible(true);
         setLocationRelativeTo(null);
         if( JckUserParameters.getShowAboutOnOpen() ){

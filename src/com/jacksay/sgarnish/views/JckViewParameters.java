@@ -53,9 +53,10 @@ import javax.swing.JTabbedPane;
 public class JckViewParameters extends JDialog {
     
     
-    private JPanel controlBar, container;
-    private JckApplicationFrame app;
-    JComboBox<Locale> languagesCombo;
+    protected JPanel controlBar, container;
+    protected JckApplicationFrame app;
+    protected JComboBox<Locale> languagesCombo;
+    public JTabbedPane content;
     
     public JckViewParameters(JckApplicationFrame owner, String title) {
         super(owner, title);
@@ -88,20 +89,22 @@ public class JckViewParameters extends JDialog {
 	    @Override
 	    public void actionPerformed(ActionEvent ae) {
 		JckUserParameters.setLocale((Locale)languagesCombo.getSelectedItem());
+                app.getStatus().warning(JckResourceBundle.get("message.reload_required"));
+                
 	    }
 	});
         languagesCombo.setRenderer(new LanguageComboBoxRenderer());
         languages.add(languagesCombo);
 	general.add(languages);
         
-        JTabbedPane pane = new JTabbedPane();
-	pane.add(JckResourceBundle.get("general"), general);
+        content = new JTabbedPane();
+	content.add(JckResourceBundle.get("general"), general);
         
-        app.hookAddParameters(pane);
+        app.hookAddParameters(content);
         
-        pane.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
+        content.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
 	
-        add(pane, BorderLayout.CENTER);
+        add(content, BorderLayout.CENTER);
         
         // ControlBar
         controlBar = new JPanel();
