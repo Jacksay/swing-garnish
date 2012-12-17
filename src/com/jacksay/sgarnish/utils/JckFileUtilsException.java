@@ -21,21 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.jacksay.sgarnish.components;
+package com.jacksay.sgarnish.utils;
 
-import java.io.File;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
+import java.io.IOException;
 
 /**
- * Simple class for create custom JFileChooser.
- * 
+ *
  * @author Stéphane Bouvry<stephane.bouvry@unicaen.fr>
  */
-public class JckFileChooserFactory {
-    public static JFileChooser createJFileChooser( FileFilter filter, File defaultPath ){
-        JFileChooser fc = new JFileChooser(defaultPath);
-        fc.setFileFilter(filter);
-        return fc;
+public class JckFileUtilsException extends IOException {
+
+    public JckFileUtilsException(String message, Throwable cause) {
+        super(message, cause);
     }
+    
 }

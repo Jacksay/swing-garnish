@@ -19,7 +19,7 @@ import javax.swing.filechooser.FileFilter;
  *
  * @author Stéphane Bouvry<stephane.bouvry@unicaen.fr>
  */
-public class JckCustomFileFilter extends FileFilter {
+public class JckCustomFileFilter extends FileFilter implements java.io.FileFilter {
 
     private String description;
     private String[] extensions;
