@@ -5,3 +5,5 @@ javadoc/
 .build.xml.swp
 /nbproject/
 /dist/
+/manifest.mf
+/nbbuild.xml
