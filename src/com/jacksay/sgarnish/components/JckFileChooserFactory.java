@@ -38,4 +38,22 @@ public class JckFileChooserFactory {
         fc.setFileFilter(filter);
         return fc;
     }
+    
+    public static JFileChooser createJFileChooserDirectory( File defaultPath ){
+        JFileChooser fc = new JFileChooser(defaultPath);
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.setFileFilter(new FileFilter() {
+
+            @Override
+            public boolean accept(File file) {
+                return file.isDirectory();
+            }
+
+            @Override
+            public String getDescription() {
+                return "A richter directory";
+            }
+        });
+        return fc;
+    }
 }
