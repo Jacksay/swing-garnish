@@ -147,7 +147,7 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
 	//JckResourceBundle.addResourceFile("jckapplication");
     }
 
-    private void initializeComponment() {
+    protected void initializeComponment() {
 	setIconImage(JckIconProvider.getImage("wrench"));
 	setSize(defaultSize);
         setLayout(new BorderLayout());
