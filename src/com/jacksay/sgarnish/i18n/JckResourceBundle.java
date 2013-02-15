@@ -27,6 +27,7 @@ import com.jacksay.sgarnish.parameters.JckUserParameters;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -44,7 +45,7 @@ public class JckResourceBundle {
 
     private JckResourceBundle() {
         files = new ArrayList<>();
-        files.add(ResourceBundle.getBundle("jckapplication", JckUserParameters.getLocale()));
+        files.add(ResourceBundle.getBundle("jckapplication", Locale.getDefault()));
     }
     
     private static JckResourceBundle getInstance(){
