@@ -40,11 +40,15 @@ public class JckResourceBundle {
     
     private List<ResourceBundle> files;
     private static JckResourceBundle instance;
-    private String missingResourceFormat = "%{0}%";
+    private String missingResourceFormat = "{0}`";
 
     private JckResourceBundle() {
         files = new ArrayList<>();
-        files.add(ResourceBundle.getBundle("jckapplication", JckUserParameters.getLocale()));
+        try {
+            files.add(ResourceBundle.getBundle("jckapplication", JckUserParameters.getLocale()));
+        } catch( Exception e ){
+            
+        }
     }
     
     private static JckResourceBundle getInstance(){
