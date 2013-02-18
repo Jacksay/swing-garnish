@@ -100,6 +100,10 @@ public class JckFileUtils {
                 url = url.substring(0, (url.length() - packPath.length()));
             }
         }
+	
+	if( url.charAt(url.length()-1) != '/' ){
+	    url += '/';
+	}
 
         return url;
     }
