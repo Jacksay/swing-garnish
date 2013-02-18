@@ -21,18 +21,3 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.jacksay.sgarnish.utils;
-
-import java.io.IOException;
-
-/**
- *
- * @author Stéphane Bouvry<stephane.bouvry@unicaen.fr>
- */
-public class JckFileUtilsException extends IOException {
-
-    public JckFileUtilsException(String message, Throwable cause) {
-        super(message, cause);
-    }
-    
-}
