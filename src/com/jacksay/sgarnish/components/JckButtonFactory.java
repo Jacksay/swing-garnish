@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2012 Expression project.organization is undefined on line 6, column 57 in Templates/Licenses/license-mit.txt..
+ * Copyright 2013 Stéphane Bouvry <stephane.bouvry@unicaen.fr>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,37 +23,19 @@
  */
 package com.jacksay.sgarnish.components;
 
-import java.io.File;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
+import com.jacksay.sgarnish.assets.JckIconProvider;
+import javax.swing.Action;
+import javax.swing.JButton;
+
 
 /**
- * Simple class for create custom JFileChooser.
- * 
- * @author Stéphane Bouvry<stephane.bouvry@unicaen.fr>
+ *
+ * @author Stéphane Bouvry <stephane.bouvry@unicaen.fr>
  */
-public class JckFileChooserFactory {
-    public static JFileChooser createJFileChooser( FileFilter filter, File defaultPath ){
-        JFileChooser fc = new JFileChooser(defaultPath);
-        fc.setFileFilter(filter);
-        return fc;
-    }
-    
-    public static JFileChooser createJFileChooserDirectory( File defaultPath ){
-        JFileChooser fc = new JFileChooser(defaultPath);
-        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fc.setFileFilter(new FileFilter() {
-
-            @Override
-            public boolean accept(File file) {
-                return file.isDirectory();
-            }
-
-            @Override
-            public String getDescription() {
-                return "A directory";
-            }
-        });
-        return fc;
+public class JckButtonFactory extends JButton {
+    public JButton createIconifiedAcceptButton( String text, Action action ){
+	JButton button = new JButton(text, JckIconProvider.getIcon("accept"));
+	button.setAction(action);
+	return button;
     }
 }
