@@ -44,7 +44,7 @@ public class JckResourceBundle {
     private String missingResourceFormat = "{0}`";
 
     private JckResourceBundle() {
-        files = new ArrayList<>();
+        files = new ArrayList<ResourceBundle>();
         try {
             files.add(ResourceBundle.getBundle("jckapplication", JckUserParameters.getLocale()));
         } catch( Exception e ){

@@ -50,7 +50,7 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
     // --- ACTIONS
     public Action quitAction, parametersAction, aboutAction;
     
-    protected SortedMap<String, JMenu> menus = new TreeMap<>();
+    protected SortedMap<String, JMenu> menus = new TreeMap<String, JMenu>();
 
     // --- MENUS de BASE
     public JMenu menuFile, menuEdit, menuAbout;
@@ -64,7 +64,7 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
     /* private JckParameters viewParameters;
      private JckParameters viewParameters;*/
     
-    private List<Locale> locales = new ArrayList<>();
+    private List<Locale> locales = new ArrayList<Locale>();
 
     public JckApplicationFrame() throws HeadlessException {
 	this("");
@@ -90,7 +90,7 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
             setTitle(JckResourceBundle.get("app.name") + " - version " + JckResourceBundle.get("app.version"));
             onOpen();
         } catch ( Exception ex ){
-            getStatus().addError(ex);
+            ex.printStackTrace();
         }
     }
 

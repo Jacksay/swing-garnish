@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 public class ViewEventDispatcherImpl implements IViewEventDispatcher {
     
     private static final Logger logger = Logger.getLogger(ViewEventDispatcherImpl.class.getName());
-    private List<IViewEventListener> listeners = new ArrayList<>();
+    private List<IViewEventListener> listeners = new ArrayList<IViewEventListener>();
     private IViewEventDispatcher master;
     
     

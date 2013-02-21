@@ -46,6 +46,7 @@ public class JckTextInput extends JTextField implements FocusListener {
     public JckTextInput(String text, String placeHolder ) {
 	this(text, placeHolder, null);
     }
+    
     public JckTextInput(String text, String placeHolder, Icon icon ) {
 	super(text);
 	textPlaceHolder		= placeHolder;
@@ -57,6 +58,23 @@ public class JckTextInput extends JTextField implements FocusListener {
 	}
 	addFocusListener(this);
     }
+
+    public void setIcon(Icon icon) {
+        if( icon != this.icon ){
+            this.icon = icon;
+            repaint();
+        }
+    }
+
+    public void setTextPlaceHolder(String textPlaceHolder) {
+         if( textPlaceHolder != this.textPlaceHolder ){
+             this.textPlaceHolder = textPlaceHolder;
+            repaint();
+        }
+       
+    }
+    
+    
     
     @Override
     public void setFont(Font f) {

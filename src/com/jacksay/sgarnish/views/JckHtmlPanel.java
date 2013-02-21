@@ -47,7 +47,6 @@ public class JckHtmlPanel extends JPanel {
         }
 	credits.setContentType("text/html");
 	credits.setFont(new Font("Arial", Font.ROMAN_BASELINE, 14));
-        System.out.println(credits.getText());
 	credits.setEditable(false);
 	credits.addHyperlinkListener(new HyperlinkListener() {
 	    @Override

@@ -81,7 +81,7 @@ public class JckViewParameters extends JDialog {
         
 	Box languages = Box.createHorizontalBox();
         languages.add(new JLabel(JckResourceBundle.get("chose_language") +" : "));
-	languagesCombo = new JComboBox<>(new DefaultComboBoxModel(new Locale[]{Locale.ENGLISH, Locale.FRENCH}){
+	languagesCombo = new JComboBox<Locale>(new DefaultComboBoxModel(new Locale[]{Locale.ENGLISH, Locale.FRENCH}){
             
         });
 	languagesCombo.setSelectedItem(JckUserParameters.getLocale());
