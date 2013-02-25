@@ -62,7 +62,7 @@ public class JckUserParameters extends Observable
     }
     
     public static Locale getLocale(){
-	return new Locale(instance.prefs.get("l18n", Locale.FRANCE.toLanguageTag()));
+	return new Locale(instance.prefs.get("l18n", Locale.FRANCE.getLanguage()));
     }
     public static void setLocale(Locale locale){
 	instance.prefs.put("l18n", locale.getLanguage());
