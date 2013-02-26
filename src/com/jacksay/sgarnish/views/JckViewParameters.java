@@ -31,13 +31,11 @@ import com.jacksay.sgarnish.parameters.JckUserParameters;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -55,7 +53,7 @@ public class JckViewParameters extends JDialog {
     
     protected JPanel controlBar, container;
     protected JckApplicationFrame app;
-    protected JComboBox<Locale> languagesCombo;
+    protected JComboBox languagesCombo;
     public JTabbedPane content;
     
     public JckViewParameters(JckApplicationFrame owner, String title) {
@@ -81,7 +79,7 @@ public class JckViewParameters extends JDialog {
         
 	Box languages = Box.createHorizontalBox();
         languages.add(new JLabel(JckResourceBundle.get("chose_language") +" : "));
-	languagesCombo = new JComboBox<Locale>(new DefaultComboBoxModel(new Locale[]{Locale.ENGLISH, Locale.FRENCH}){
+	languagesCombo = new JComboBox(new DefaultComboBoxModel(new Locale[]{Locale.ENGLISH, Locale.FRENCH}){
             
         });
 	languagesCombo.setSelectedItem(JckUserParameters.getLocale());

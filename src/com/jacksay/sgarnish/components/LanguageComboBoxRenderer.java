@@ -35,10 +35,11 @@ import javax.swing.ListCellRenderer;
  *
  * @author Stéphane Bouvry<stephane.bouvry@unicaen.fr>
  */
-public class LanguageComboBoxRenderer extends JLabel implements ListCellRenderer<Locale> {
+public class LanguageComboBoxRenderer extends JLabel implements ListCellRenderer {
 
     @Override
-    public Component getListCellRendererComponent(JList<? extends Locale> list, Locale e, int i, boolean isSelected, boolean bln1) {
+    public Component getListCellRendererComponent(JList list, Object o, int i, boolean isSelected, boolean bln1) {
+	Locale e = (Locale)o;
         setText(JckResourceBundle.get("lang." +e.getLanguage()));
         setIcon(JckIconProvider.getIcon("flag_" + e.getLanguage()));
         if (isSelected) {
