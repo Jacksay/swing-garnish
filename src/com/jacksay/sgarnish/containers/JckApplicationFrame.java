@@ -121,10 +121,13 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
         populateFile( menuFile );
 	menuFile.add(item = new JMenuItem(quitAction));
 	item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_MASK));
+        
 	mainMenu.add(menuFile);
 
 	menuEdit = new JMenu(JckResourceBundle.get("edit"));
+        populateEdit(menuEdit);
 	menuEdit.add(parametersAction);
+        
 	mainMenu.add(menuEdit);
         
         hookAddMenu(mainMenu);
@@ -263,6 +266,10 @@ public abstract class JckApplicationFrame extends JFrame implements Observer {
     }
 
     protected void populateFile(JMenu menuFile) {
+        
+    }
+    
+    protected void populateEdit(JMenu menuFile) {
         
     }
 
