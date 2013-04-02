@@ -113,7 +113,7 @@ public class JckTabRenderer extends JPanel implements MouseListener, FocusListen
         int indexTab = pane.indexOfTabComponent(this);
         pane.remove(indexTab);
         fireRemove();
-        removeTabRendererListenners();
+        //removeTabRendererListenners();
         
     }
     // -------------------------------------------------------------------------
@@ -141,30 +141,32 @@ public class JckTabRenderer extends JPanel implements MouseListener, FocusListen
     }
 
     // -------------------------------------------------------------------------
-    public static void createRenderer(int index, JTabbedPane pane, boolean closable, boolean editable) {
-        pane.setTabComponentAt(index, new JckTabRenderer(pane, closable, editable));
+    public static JckTabRenderer createRenderer(int index, JTabbedPane pane, boolean closable, boolean editable) {
+        JckTabRenderer renderer = new JckTabRenderer(pane, closable, editable);
+        pane.setTabComponentAt(index, renderer);
+        return renderer;
     }
 
-    public static void createRenderer(int index, JTabbedPane pane, boolean closable) {
-        createRenderer(index, pane, closable, true);
+    public static JckTabRenderer createRenderer(int index, JTabbedPane pane, boolean closable) {
+        return createRenderer(index, pane, closable, true);
     }
 
-    public static void createRenderer(int index, JTabbedPane pane) {
-        createRenderer(index, pane, true, true);
+    public static JckTabRenderer createRenderer(int index, JTabbedPane pane) {
+        return createRenderer(index, pane, true, true);
     }
 
     // -------------------------------------------------------------------------
-    public static void createRenderForLastAddedTab(JTabbedPane pane, boolean closable, boolean editable) {
+    public static JckTabRenderer createRenderForLastAddedTab(JTabbedPane pane, boolean closable, boolean editable) {
         int lastIndex = pane.getTabCount() - 1;
-        createRenderer(lastIndex, pane, closable, editable);
+        return createRenderer(lastIndex, pane, closable, editable);
     }
 
-    public static void createRenderForLastAddedTab(JTabbedPane pane, boolean closable) {
-        createRenderForLastAddedTab(pane, closable, true);
+    public static JckTabRenderer createRenderForLastAddedTab(JTabbedPane pane, boolean closable) {
+        return createRenderForLastAddedTab(pane, closable, true);
     }
 
-    public static void createRenderForLastAddedTab(JTabbedPane pane ) {
-        createRenderForLastAddedTab(pane, true, true);
+    public static JckTabRenderer createRenderForLastAddedTab(JTabbedPane pane ) {
+        return createRenderForLastAddedTab(pane, true, true);
     }
     
     // -------------------------------------------------------------------------
