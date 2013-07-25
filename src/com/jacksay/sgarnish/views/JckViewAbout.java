@@ -105,7 +105,7 @@ public class JckViewAbout extends JDialog {
 		+ "</p>"
 		+ "</td>"
 		+ "<td align=right>"
-		+ "<img src=\"" + getClass().getResource("/LOGO.png") + "\" alt=\"LOGO\"/>"
+		+ "<img src=\"" + getClass().getResource(JckResourceBundle.get("file.logo")) + "\" alt=\"LOGO\"/>"
 		+ "</td>"
 		+ "</tr><tr>"
 		+ "</table>"
